@@ -17,32 +17,30 @@ function writePassword() {
 //Creates popups  that gather user input and stores that data in an object
 function questionPopUp(){
   var length = parseInt(window.prompt("How long would you like the password? Please enter a number between 8 - 128."));
-  if(length == null){
-    length = parseInt(window.prompt("How long would you like the password? Please enter a number between 8 - 128."));
-  }
 
   while (length < 8 || length > 128 ) {
-    length =  parseInt(window.prompt("Incorrect input. Please enter a number between 8 and 128."));
+    length =  parseInt(prompt("Incorrect input. Please enter a number between 8 and 128."));
   }
-  var letters = window.confirm("Would you like letters in your password? Please select 'Yes' or 'Cancel'");
+  var letters = confirm("Would you like letters in your password? Please select 'Yes' or 'Cancel'");
   var caps = false;
   var lower = false;
 
   if (letters) {
-    caps = window.confirm("Would you like capitol letters? Please select 'Yes' or 'Cancel'");
-    lower = window.confirm("Would you like lower case letters? Please select 'Yes' or 'Cancel'");
+    caps = confirm("Would you like capitol letters? Please select 'Yes' or 'Cancel'");
+    lower = confirm("Would you like lower case letters? Please select 'Yes' or 'Cancel'");
+    console.log("caps:    " + caps);
+    console.log("lower:    " + lower);
   }
-  var numbers =  window.confirm("Would you like numbers in your password? Please select 'Yes' or 'Cancel'");
-  var specials = window.confirm("Would you like special characters in your password? Please select 'Yes' or 'Cancel'");
+  var numbers =  confirm("Would you like numbers in your password? Please select 'Yes' or 'Cancel'");
+  var specials = confirm("Would you like special characters in your password? Please select 'Yes' or 'Cancel'");
 
   if (!letters && !numbers && !specials) {
-    window.alert("Invalid selections. Please try again. Please select 'Yes' or 'Cancel'");
+    alert("Invalid selections. Please try again. Please select 'Yes' or 'Cancel'");
     questionPopUp();
   }
 
   return {
     length: length,
-    letters: letters,
     capitals: caps,
     lowerCase: lower,
     numbers: numbers,
@@ -53,16 +51,16 @@ function questionPopUp(){
 //This function takes an object of user data and creates and object filled with objects made of up the password requirements.
 //It then loops through the objects and determines if the string stored in the 'material' should be added to the returned string.
 function passwordMaterialGenerator(passwordRequirements){
-  var lowerCase =  "abcdefghijklmnopqrstuvwxyz";
-  var passwordMaterial;
+  var lowerCaseLetters ="abcdefghijklmnopqrstuvwxyz";
+  var passwordMaterial ='';
   var passwordBuildData = {
     lowerCase: {
       enabled: passwordRequirements.lowerCase,
-      material: lowerCase
+      material: lowerCaseLetters
     }, 
     capitals: {
       enabled: passwordRequirements.capitals,
-      material: lowerCase.toUpperCase()
+      material: lowerCaseLetters.toUpperCase()
     },
     numbers: {
       enabled: passwordRequirements.numbers,
@@ -75,8 +73,9 @@ function passwordMaterialGenerator(passwordRequirements){
   }
 
   for (each of Object.keys(passwordBuildData)){
-    if (passwordBuildData[each].enabled === true) {
+    if (passwordBuildData[each].enabled) {
       passwordMaterial = passwordMaterial+passwordBuildData[each].material
+
     }
   }
   return passwordMaterial;
